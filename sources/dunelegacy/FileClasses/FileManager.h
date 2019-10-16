@@ -23,6 +23,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include <memory>
 
 /// A class for loading all the PAK-Files.
@@ -59,10 +60,14 @@ public:
     sdl2::RWops_ptr openFile(const std::string& filename);
 
     bool exists(const std::string& filename) const;
+
+    void insertMemoryFile(const std::string &filename, const void *data, size_t length);
 private:
     std::string md5FromFilename(const std::string& filename) const;
 
     std::vector<std::unique_ptr<Pakfile>> pakFiles;
+
+    std::map<std::string, std::pair<const void *, size_t>> memoryFiles;
 };
 
 #endif // FILEMANAGER_H

@@ -21,7 +21,12 @@ DUNEMUSIC_EXPORT
 void DuneMusic_Init(int sampleRate, const char *dataDirectory, DuneMusicOplEmu oplEmu)
 {
     Mix_OpenAudio(sampleRate, MIX_DEFAULT_FORMAT, 2, 1024);
-    duneLegacyDataDir.assign(dataDirectory);
+
+    if (dataDirectory && dataDirectory[0])
+        duneLegacyDataDir.assign(dataDirectory);
+    else
+        duneLegacyDataDir.assign(".");
+
     pFileManager.reset(new FileManager);
     SoundAdlibPC::s_oplEmu = oplEmu;
     sPlayer.reset(new ADLPlayer);
@@ -33,6 +38,12 @@ void DuneMusic_Quit()
     sPlayer.reset();
     pFileManager.reset();
     Mix_CloseAudio();
+}
+
+DUNEMUSIC_EXPORT
+void DuneMusic_InsertMemoryFile(const char *filename, const void *data, size_t length)
+{
+    pFileManager->insertMemoryFile(filename, data, length);
 }
 
 DUNEMUSIC_EXPORT

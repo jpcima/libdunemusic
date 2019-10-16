@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -16,6 +17,8 @@ void DuneMusic_Init(int sampleRate, const char *dataDirectory, DuneMusicOplEmu o
 void DuneMusic_Quit();
 
 void DuneMusic_GetSamples(int16_t *buf, unsigned count);
+
+void DuneMusic_InsertMemoryFile(const char *filename, const void *data, size_t length);
 
 typedef enum DuneMusicType {
     kMusicAttack = 0,   /*!< Played when at least one of player's units was hit. */

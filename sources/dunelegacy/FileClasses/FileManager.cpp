@@ -129,6 +129,17 @@ std::vector<std::string> FileManager::getMissingFiles() {
 sdl2::RWops_ptr FileManager::openFile(const std::string& filename) {
     sdl2::RWops_ptr ret;
 
+    // try loading memory file
+    {
+        auto it = memoryFiles.find(strToUpper(filename));
+        if (it != memoryFiles.end()) {
+            ret = sdl2::RWops_ptr{SDL_RWFromConstMem(it->second.first, it->second.second)};
+            if(ret) {
+                return ret;
+            }
+        }
+    }
+
     // try loading external file
     for(const auto& searchPath : getSearchPath()) {
         auto externalFilename = searchPath + "/";
@@ -153,6 +164,10 @@ sdl2::RWops_ptr FileManager::openFile(const std::string& filename) {
 
 bool FileManager::exists(const std::string& filename) const {
 
+    if (memoryFiles.find(strToUpper(filename)) != memoryFiles.end()) {
+        return true;
+    }
+
     // try finding external file
     for(const std::string& searchPath : getSearchPath()) {
         auto externalFilename = searchPath + "/";
@@ -170,6 +185,11 @@ bool FileManager::exists(const std::string& filename) const {
     }
 
     return false;
+}
+
+void FileManager::insertMemoryFile(const std::string &filename, const void *data, size_t length)
+{
+    memoryFiles[strToUpper(filename)] = {data, length};
 }
 
 
