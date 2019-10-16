@@ -266,9 +266,7 @@ struct Chip {
 	Bit32u WriteAddr( Bit32u port, Bit8u val );
 
 	void GenerateBlock2( Bitu samples, Bit32s* output );
-	void GenerateBlock2_Mix( Bitu samples, Bit32s* output );
 	void GenerateBlock3( Bitu samples, Bit32s* output );
-	void GenerateBlock3_Mix( Bitu samples, Bit32s* output );
 
 	//Update the synth handlers in all channels
 	void UpdateSynths();
@@ -287,8 +285,6 @@ struct Handler {
 	void WriteReg( Bit32u addr, Bit8u val );
 	void GenerateArr(Bit32s *out, Bitu *samples);
 	void GenerateArr(Bit16s *out, Bitu *samples);
-	void GenerateArrMix(Bit32s *out, Bitu *samples);
-	void GenerateArrMix(Bit16s *out, Bitu *samples);
 	void Init( Bitu rate );
 };
 

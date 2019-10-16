@@ -15,8 +15,6 @@ public:
 
   void update(short *buf, int samples) override
   {
-#warning FIXME dosbox OPL
-
       while (samples > 0) {
           Bitu count = samples;
 
