@@ -49,6 +49,9 @@ typedef enum DuneMusicType {
 void DuneMusic_ChangeMusic(DuneMusicType musicType);
 void DuneMusic_ChangeMusicEx(DuneMusicType musicType, const char *filename, int musicNum);
 
+int16_t *DuneMusic_SynthesizeAudio(const char *filename, int musicNum, int volume, size_t *numFramesReturned);
+void DuneMusic_FreeAudio(int16_t *audioBuffer);
+
 int DuneMusic_IsMusicEnabled();
 void DuneMusic_SetMusicEnabled(int enabled);
 int DuneMusic_IsMusicPlaying();

@@ -65,6 +65,38 @@ void DuneMusic_ChangeMusicEx(DuneMusicType musicType, const char *filename, int 
 }
 
 DUNEMUSIC_EXPORT
+int16_t *DuneMusic_SynthesizeAudio(const char *filename, int musicNum, int volume, size_t *numFramesReturned)
+{
+    sdl2::RWops_ptr rwop = pFileManager->openFile(filename);
+    if (!rwop)
+        return nullptr;
+
+    std::unique_ptr<SoundAdlibPC> adlib{new SoundAdlibPC(rwop.get())};
+
+    if (volume < 0)
+        volume = 64;
+
+    adlib->setVolume(volume);
+
+    sdl2::mix_chunk_ptr chunk{adlib->getSubsong(musicNum)};
+    if (!chunk)
+        return nullptr;
+
+    chunk->allocated = 0;
+
+    if (numFramesReturned)
+        *numFramesReturned = chunk->alen / (2 * sizeof(int16_t));
+
+    return (int16_t *)chunk->abuf;
+}
+
+DUNEMUSIC_EXPORT
+void DuneMusic_FreeAudio(int16_t *audioBuffer)
+{
+    SDL_free(audioBuffer);
+}
+
+DUNEMUSIC_EXPORT
 int DuneMusic_IsMusicEnabled()
 {
     return sPlayer->isMusicOn();

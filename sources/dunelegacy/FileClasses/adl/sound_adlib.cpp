@@ -2534,8 +2534,9 @@ Mix_Chunk* SoundAdlibPC::getSubsong(int Num) {
         SoundAdlibPC::callback(this, buf + bufSize - 1024, 1024);
 
         bSilent = true;
-        for(Uint8* p = buf + bufSize - 1024; p < buf + bufSize; p++) {
-            if(*p != 0) {
+        for(Sint16* p = (Sint16 *)(buf + bufSize - 1024); p < (Sint16 *)(buf + bufSize); p++) {
+            /* prudence against OPL emulators which produce ±1 in silent state */
+            if(std::abs(*p) > 1) {
                 bSilent = false;
                 break;
             }
