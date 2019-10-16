@@ -5,9 +5,9 @@
 
 ///
 struct MixerData {
-    uint init;
-    uint sampleRate;
-    uint channels;
+    unsigned init;
+    unsigned sampleRate;
+    unsigned channels;
     void (SDLCALL *hookFunc)(void *udata, Uint8 *stream, int len);
     void *hookData;
 };
