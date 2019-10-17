@@ -1,7 +1,7 @@
 #pragma once
 
-#include <SDL2/SDL_stdinc.h>
-#include <SDL2/SDL_audio.h>
+#include <SDL_stdinc.h>
+#include <SDL_audio.h>
 
 #ifdef __cplusplus
 extern "C" {

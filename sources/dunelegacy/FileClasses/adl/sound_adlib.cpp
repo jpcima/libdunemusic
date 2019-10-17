@@ -54,7 +54,7 @@
 
 #include <memory>
 
-#include <SDL2/SDL_endian.h>
+#include <SDL_endian.h>
 
 
 #include <FileClasses/adl/opl.h>

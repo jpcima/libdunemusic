@@ -34,6 +34,8 @@ add_library(fakeSDLmixer STATIC
   "sources/fakeSDLmixer/fakeSDLmixer.cpp")
 target_include_directories(fakeSDLmixer
   PUBLIC "sources/fakeSDLmixer")
+target_link_libraries(fakeSDLmixer
+  PUBLIC dunemusic_SDL2)
 
 ###
 add_library(dunemusic SHARED

@@ -1,5 +1,5 @@
 #include "dunemusic.h"
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <random>
 #include <cstring>
 
