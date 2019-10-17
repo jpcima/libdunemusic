@@ -57,16 +57,6 @@ add_library(dunemusic SHARED
   "sources/dunelegacy/misc/format.cpp"
   "sources/dunelegacy/misc/md5.cpp"
   "sources/dunelegacy/misc/string_util.cpp"
-  "sources/dunelegacy/fixmath/fix16.c"
-  "sources/dunelegacy/fixmath/fix16_exp.c"
-  "sources/dunelegacy/fixmath/fix16_sqrt.c"
-  "sources/dunelegacy/fixmath/fix16_str.c"
-  "sources/dunelegacy/fixmath/fix16_trig.c"
-  "sources/dunelegacy/fixmath/fix32.c"
-  "sources/dunelegacy/fixmath/fix32_exp.c"
-  "sources/dunelegacy/fixmath/fix32_sqrt.c"
-  "sources/dunelegacy/fixmath/fix32_str.c"
-  "sources/dunelegacy/fixmath/fix32_trig.c"
   "sources/dunelegacy/mmath.cpp"
   )
 target_include_directories(dunemusic
