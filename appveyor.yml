@@ -35,3 +35,15 @@ build_script:
 
 artifacts:
   - path: release/*
+
+deploy:
+  release: automatic
+  tag: automatic
+  description: 'Automatic build'
+  provider: GitHub
+  auth_token:
+    secure: BA3ctjiTioztzn34tDNOROwAI/5Wc3HUXVliy2tM393yHKSKtdrbrT5ErPbPMy4V
+  draft: false
+  prerelease: true
+  on:
+    branch: master
