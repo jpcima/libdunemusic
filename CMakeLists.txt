@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.3)
 
 project(libdunemusic)
 
+set(DUNEMUSIC_SDL2_PATH "" CACHE STRING "Use SDL2 libraries from this directory")
+
 option(BUILD_PLAYER "Build the player" OFF)
 
 set(CMAKE_CXX_STANDARD "11")
@@ -16,14 +18,33 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "^GNU|Clang$")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 endif()
 
+add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+
 ###
-find_package(SDL2 REQUIRED)
 add_library(dunemusic_SDL2 INTERFACE)
-if(TARGET SDL2::SDL2)
-  target_link_libraries(dunemusic_SDL2 INTERFACE SDL2::SDL2)
+if(DUNEMUSIC_SDL2_PATH)
+  find_library(SDL2_LIBRARY "SDL2"
+    PATHS "${DUNEMUSIC_SDL2_PATH}/lib")
+  find_path(SDL2_INCLUDE_DIR "SDL.h"
+    PATHS "${DUNEMUSIC_SDL2_PATH}/include"
+    PATH_SUFFIXES "SDL2")
+  if(NOT SDL2_LIBRARY)
+    message(FATAL_ERROR "Cannot find SDL2 libraries")
+  elseif(NOT SDL2_INCLUDE_DIR)
+    message(FATAL_ERROR "Cannot find SDL2 headers")
+  endif()
+  message(STATUS "SDL library: ${SDL2_LIBRARY}")
+  message(STATUS "SDL headers: ${SDL2_INCLUDE_DIR}")
+  target_include_directories(dunemusic_SDL2 INTERFACE "${SDL2_INCLUDE_DIR}")
+  target_link_libraries(dunemusic_SDL2 INTERFACE "${SDL2_LIBRARY}")
 else()
-  target_include_directories(dunemusic_SDL2 INTERFACE ${SDL2_INCLUDE_DIRS})
-  target_link_libraries(dunemusic_SDL2 INTERFACE ${SDL2_LIBRARIES})
+  find_package(SDL2 REQUIRED)
+  if(TARGET SDL2::SDL2)
+    target_link_libraries(dunemusic_SDL2 INTERFACE SDL2::SDL2)
+  else()
+    target_include_directories(dunemusic_SDL2 INTERFACE ${SDL2_INCLUDE_DIRS})
+    target_link_libraries(dunemusic_SDL2 INTERFACE ${SDL2_LIBRARIES})
+  endif()
 endif()
 
 # find_library(SDL2_MIXER_LIBRARY "SDL2_mixer")
@@ -64,6 +85,8 @@ target_include_directories(dunemusic
 target_link_libraries(dunemusic
   PRIVATE dunemusic_SDL2
   PRIVATE fakeSDLmixer)
+target_compile_definitions(dunemusic
+  PRIVATE "DUNEMUSIC_BUILD=1")
 
 if(BUILD_PLAYER)
   add_executable(duneplay
