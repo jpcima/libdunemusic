@@ -5,12 +5,6 @@
 #include "FileClasses/adl/sound_adlib.h"
 #include <fakeSDLmixer.h>
 
-#if defined(_WIN32)
-#define DUNEMUSIC_EXPORT __declspec(dllexport)
-#elif defined(__GNUC__)
-#define DUNEMUSIC_EXPORT __attribute__((visibility("default")))
-#endif
-
 std::unique_ptr<FileManager> pFileManager;
 
 static std::unique_ptr<ADLPlayer> sPlayer;

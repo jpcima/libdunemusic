@@ -1,0 +1,37 @@
+environment:
+  matrix:
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      CMAKE_GENERATOR: Visual Studio 15 2017 Win64
+      PLATFORM: Win64
+      SDL_ARCH: x64
+      BUILD_TYPE: vs2017-x64
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      CMAKE_GENERATOR: Visual Studio 15 2017
+      PLATFORM: Win32
+      SDL_ARCH: x86
+      BUILD_TYPE: vs2017-x86
+
+configuration:
+  - Release
+
+cache:
+  - download
+
+install:
+  - ps: New-Item download -ItemType Directory -Force
+  - ps: Invoke-WebRequest "https://libsdl.org/release/SDL2-devel-2.0.10-VC.zip" -OutFile "download/SDL2-devel-2.0.10-VC.zip"
+  - ps: 7z x "download/SDL2-devel-2.0.10-VC.zip"
+  - ps: cp SDL2-2.0.10/lib/"${env:SDL_ARCH}"/* SDL2-2.0.10/lib/
+
+build_script:
+  - ps: mkdir -p build
+  - ps: mkdir -p release
+  - ps: cd build
+  - ps: cmake -G "${env:CMAKE_GENERATOR}" -DDUNEMUSIC_SDL2_PATH="$(pwd)/../SDL2-2.0.10" ..
+  - ps: cmake --build . --config "${env:CONFIGURATION}"
+  - ps: cd "${env:CONFIGURATION}"
+  - ps: 7z a "../../release/dunemusic-${env:BUILD_TYPE}-${env:CONFIGURATION}.7z" dunemusic.dll
+  - ps: cd ../..
+
+artifacts:
+  - path: release/*
