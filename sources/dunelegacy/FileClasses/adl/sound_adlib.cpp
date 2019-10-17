@@ -491,10 +491,10 @@ AdlibDriver::AdlibDriver(int rate, int oplEmu) {
 #if 1
     Copl *a = createOpl(oplEmu, rate, false);
     Copl *b = createOpl(oplEmu, rate, false);
-    opl = std::make_unique<CSurroundopl>(a, b, true);
+    opl.reset(new CSurroundopl(a, b, true));
     // CSurroundopl now owns a and b and will free upon destruction
 #else
-    opl = std::unique_ptr<Copl>(createOpl(oplEmu, rate, true));
+    opl.reset(createOpl(oplEmu, rate, true));
 #endif
 
     memset(_channels, 0, sizeof(_channels));

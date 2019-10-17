@@ -4,7 +4,7 @@ project(libdunemusic)
 
 option(BUILD_PLAYER "Build the player" OFF)
 
-set(CMAKE_CXX_STANDARD "14")
+set(CMAKE_CXX_STANDARD "11")
 set(CMAKE_C_VISIBILITY_PRESET "hidden")
 set(CMAKE_CXX_VISIBILITY_PRESET "hidden")
 set(CMAKE_VISIBILITY_INLINES_HIDDEN "hidden")

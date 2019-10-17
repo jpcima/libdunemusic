@@ -45,7 +45,7 @@ FileManager::FileManager() {
             if(getCaseInsensitiveFilename(filepath)) {
                 try {
                     SDL_Log("%s  %s", md5FromFilename(filepath).c_str(), filepath.c_str());
-                    pakFiles.push_back(std::make_unique<Pakfile>(filepath));
+                    pakFiles.emplace_back(new Pakfile(filepath));
                 } catch (std::exception &e) {
                     pakFiles.clear();
 

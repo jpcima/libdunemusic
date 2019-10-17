@@ -338,7 +338,7 @@ std::string readCompleteFile(const std::string& filename) {
         return "";
     }
 
-    std::unique_ptr<char[]> filedata = std::make_unique<char[]>((size_t) filesize);
+    std::unique_ptr<char[]> filedata{new char[(size_t) filesize]};
 
     if(SDL_RWread(RWopsFile.get(), filedata.get(), (size_t) filesize, 1) != 1) {
         return "";
