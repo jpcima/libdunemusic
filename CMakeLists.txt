@@ -103,3 +103,6 @@ if(USE_STDCALL)
 else()
   target_compile_definitions(dunemusic PUBLIC "DUNEMUSIC_CDECL=1")
 endif()
+
+message(STATUS "Build the player: ${BUILD_PLAYER}")
+message(STATUS "Use stdcall: ${USE_STDCALL}")
