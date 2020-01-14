@@ -9,11 +9,25 @@ environment:
       PLATFORM: Win64
       SDL_ARCH: x64
       BUILD_TYPE: vs2017-x64
+      USE_STDCALL: FALSE
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       CMAKE_GENERATOR: Visual Studio 15 2017
       PLATFORM: Win32
       SDL_ARCH: x86
       BUILD_TYPE: vs2017-x86
+      USE_STDCALL: FALSE
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      CMAKE_GENERATOR: Visual Studio 15 2017 Win64
+      PLATFORM: Win64
+      SDL_ARCH: x64
+      BUILD_TYPE: vs2017-x64-stdcall
+      USE_STDCALL: TRUE
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      CMAKE_GENERATOR: Visual Studio 15 2017
+      PLATFORM: Win32
+      SDL_ARCH: x86
+      BUILD_TYPE: vs2017-x86-stdcall
+      USE_STDCALL: TRUE
 
 configuration:
   - Release
@@ -31,7 +45,7 @@ build_script:
   - ps: mkdir -p build
   - ps: mkdir -p release
   - ps: cd build
-  - ps: cmake -G "${env:CMAKE_GENERATOR}" -DDUNEMUSIC_SDL2_PATH="$(pwd)/../SDL2-2.0.10" ..
+  - ps: cmake -G "${env:CMAKE_GENERATOR}" -DUSE_STDCALL="${env:USE_STDCALL}" -DDUNEMUSIC_SDL2_PATH="$(pwd)/../SDL2-2.0.10" ..
   - ps: cmake --build . --config "${env:CONFIGURATION}"
   - ps: cd "${env:CONFIGURATION}"
   - ps: 7z a "../../release/dunemusic-${env:BUILD_TYPE}-${env:CONFIGURATION}.7z" dunemusic.dll
