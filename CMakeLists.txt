@@ -5,6 +5,7 @@ project(libdunemusic)
 set(DUNEMUSIC_SDL2_PATH "" CACHE STRING "Use SDL2 libraries from this directory")
 
 option(BUILD_PLAYER "Build the player" OFF)
+option(USE_STDCALL "Build the Windows library using STDCALL convention" OFF)
 
 set(CMAKE_CXX_STANDARD "11")
 set(CMAKE_C_VISIBILITY_PRESET "hidden")
@@ -94,4 +95,11 @@ if(BUILD_PLAYER)
   target_link_libraries(duneplay
     PRIVATE dunemusic
     PRIVATE dunemusic_SDL2)
+endif()
+
+
+if(USE_STDCALL)
+  target_compile_definitions(dunemusic PUBLIC "DUNEMUSIC_STDCALL=1")
+else()
+  target_compile_definitions(dunemusic PUBLIC "DUNEMUSIC_CDECL=1")
 endif()

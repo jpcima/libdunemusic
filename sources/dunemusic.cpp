@@ -12,7 +12,7 @@ static std::unique_ptr<ADLPlayer> sPlayer;
 std::string duneLegacyDataDir;
 
 DUNEMUSIC_EXPORT
-void DuneMusic_Init(int sampleRate, const char *dataDirectory, DuneMusicOplEmu oplEmu)
+void DMCALLCC DuneMusic_Init(int sampleRate, const char *dataDirectory, DuneMusicOplEmu oplEmu)
 {
     Mix_OpenAudio(sampleRate, MIX_DEFAULT_FORMAT, 2, 1024);
 
@@ -27,7 +27,7 @@ void DuneMusic_Init(int sampleRate, const char *dataDirectory, DuneMusicOplEmu o
 }
 
 DUNEMUSIC_EXPORT
-void DuneMusic_Quit()
+void DMCALLCC DuneMusic_Quit()
 {
     sPlayer.reset();
     pFileManager.reset();
@@ -35,31 +35,31 @@ void DuneMusic_Quit()
 }
 
 DUNEMUSIC_EXPORT
-void DuneMusic_InsertMemoryFile(const char *filename, const void *data, size_t length)
+void DMCALLCC DuneMusic_InsertMemoryFile(const char *filename, const void *data, size_t length)
 {
     pFileManager->insertMemoryFile(filename, data, length);
 }
 
 DUNEMUSIC_EXPORT
-void DuneMusic_GetSamples(int16_t *buf, unsigned count)
+void DMCALLCC DuneMusic_GetSamples(int16_t *buf, unsigned count)
 {
     FakeMix_ProcessFrames(buf, count);
 }
 
 DUNEMUSIC_EXPORT
-void DuneMusic_ChangeMusic(DuneMusicType musicType)
+void DMCALLCC DuneMusic_ChangeMusic(DuneMusicType musicType)
 {
     sPlayer->changeMusic((MUSICTYPE)musicType);
 }
 
 DUNEMUSIC_EXPORT
-void DuneMusic_ChangeMusicEx(DuneMusicType musicType, const char *filename, int musicNum)
+void DMCALLCC DuneMusic_ChangeMusicEx(DuneMusicType musicType, const char *filename, int musicNum)
 {
     sPlayer->changeMusicEx((MUSICTYPE)musicType, filename, musicNum);
 }
 
 DUNEMUSIC_EXPORT
-int16_t *DuneMusic_SynthesizeAudio(const char *filename, int musicNum, int volume, size_t *numFramesReturned)
+int16_t *DMCALLCC DuneMusic_SynthesizeAudio(const char *filename, int musicNum, int volume, size_t *numFramesReturned)
 {
     sdl2::RWops_ptr rwop = pFileManager->openFile(filename);
     if (!rwop)
@@ -85,43 +85,43 @@ int16_t *DuneMusic_SynthesizeAudio(const char *filename, int musicNum, int volum
 }
 
 DUNEMUSIC_EXPORT
-void DuneMusic_FreeAudio(int16_t *audioBuffer)
+void DMCALLCC DuneMusic_FreeAudio(int16_t *audioBuffer)
 {
     SDL_free(audioBuffer);
 }
 
 DUNEMUSIC_EXPORT
-int DuneMusic_IsMusicEnabled()
+int DMCALLCC DuneMusic_IsMusicEnabled()
 {
     return sPlayer->isMusicOn();
 }
 
 DUNEMUSIC_EXPORT
-void DuneMusic_SetMusicEnabled(int enabled)
+void DMCALLCC DuneMusic_SetMusicEnabled(int enabled)
 {
     sPlayer->setMusic(enabled);
 }
 
 DUNEMUSIC_EXPORT
-int DuneMusic_IsMusicPlaying()
+int DMCALLCC DuneMusic_IsMusicPlaying()
 {
     return sPlayer->isMusicPlaying();
 }
 
 DUNEMUSIC_EXPORT
-void DuneMusic_SetMusicVolume(int volume)
+void DMCALLCC DuneMusic_SetMusicVolume(int volume)
 {
     sPlayer->setMusicVolume(volume);
 }
 
 DUNEMUSIC_EXPORT
-unsigned DuneMusic_GetKnownMusicCount()
+unsigned DMCALLCC DuneMusic_GetKnownMusicCount()
 {
     return numMusicTracks;
 }
 
 DUNEMUSIC_EXPORT
-void DuneMusic_SetKnownMusicIndex(unsigned index)
+void DMCALLCC DuneMusic_SetKnownMusicIndex(unsigned index)
 {
     if (index >= numMusicTracks)
         return;

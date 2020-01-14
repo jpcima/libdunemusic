@@ -17,18 +17,33 @@ extern "C" {
 #   endif
 #endif
 
+#ifdef __WIN32
+#   if defined(DUNEMUSIC_CDECL) && !defined(DUNEMUSIC_STDCALL)
+#       define DMCALL __cdecl
+#       define DMCALLCC
+#   elif defined(DUNEMUSIC_STDCALL) && !defined(DUNEMUSIC_CDECL)
+#       define DMCALL __stdcall
+#       define DMCALLCC __stdcall
+#   else
+#       error You must define either DUNEMUSIC_CDECL or DUNEMUSIC_STDCALL.
+#   endif
+#else
+#   define DMCALL
+#   define DMCALLCC
+#endif
+
 typedef enum DuneMusicOplEmu {
     kOplEmuWoody,
     kOplEmuDosbox,
     kOplEmuNuked,
 } DuneMusicOplEmu;
 
-DUNEMUSIC_EXPORT void DuneMusic_Init(int sampleRate, const char *dataDirectory, DuneMusicOplEmu oplEmu);
-DUNEMUSIC_EXPORT void DuneMusic_Quit();
+DUNEMUSIC_EXPORT void DMCALL DuneMusic_Init(int sampleRate, const char *dataDirectory, DuneMusicOplEmu oplEmu);
+DUNEMUSIC_EXPORT void DMCALL DuneMusic_Quit();
 
-DUNEMUSIC_EXPORT void DuneMusic_GetSamples(int16_t *buf, unsigned count);
+DUNEMUSIC_EXPORT void DMCALL DuneMusic_GetSamples(int16_t *buf, unsigned count);
 
-DUNEMUSIC_EXPORT void DuneMusic_InsertMemoryFile(const char *filename, const void *data, size_t length);
+DUNEMUSIC_EXPORT void DMCALL DuneMusic_InsertMemoryFile(const char *filename, const void *data, size_t length);
 
 typedef enum DuneMusicType {
     kMusicAttack = 0,   /*!< Played when at least one of player's units was hit. */
@@ -56,19 +71,19 @@ typedef enum DuneMusicType {
     kMusicRandom = 0xFF /*!< Random music (attack music or peace music) */
 } DuneMusicType;
 
-DUNEMUSIC_EXPORT void DuneMusic_ChangeMusic(DuneMusicType musicType);
-DUNEMUSIC_EXPORT void DuneMusic_ChangeMusicEx(DuneMusicType musicType, const char *filename, int musicNum);
+DUNEMUSIC_EXPORT void DMCALL DuneMusic_ChangeMusic(DuneMusicType musicType);
+DUNEMUSIC_EXPORT void DMCALL DuneMusic_ChangeMusicEx(DuneMusicType musicType, const char *filename, int musicNum);
 
-DUNEMUSIC_EXPORT int16_t *DuneMusic_SynthesizeAudio(const char *filename, int musicNum, int volume, size_t *numFramesReturned);
-DUNEMUSIC_EXPORT void DuneMusic_FreeAudio(int16_t *audioBuffer);
+DUNEMUSIC_EXPORT int16_t *DMCALL DuneMusic_SynthesizeAudio(const char *filename, int musicNum, int volume, size_t *numFramesReturned);
+DUNEMUSIC_EXPORT void DMCALL DuneMusic_FreeAudio(int16_t *audioBuffer);
 
-DUNEMUSIC_EXPORT int DuneMusic_IsMusicEnabled();
-DUNEMUSIC_EXPORT void DuneMusic_SetMusicEnabled(int enabled);
-DUNEMUSIC_EXPORT int DuneMusic_IsMusicPlaying();
-DUNEMUSIC_EXPORT void DuneMusic_SetMusicVolume(int volume);
+DUNEMUSIC_EXPORT int DMCALL DuneMusic_IsMusicEnabled();
+DUNEMUSIC_EXPORT void DMCALL DuneMusic_SetMusicEnabled(int enabled);
+DUNEMUSIC_EXPORT int DMCALL DuneMusic_IsMusicPlaying();
+DUNEMUSIC_EXPORT void DMCALL DuneMusic_SetMusicVolume(int volume);
 
-DUNEMUSIC_EXPORT unsigned DuneMusic_GetKnownMusicCount();
-DUNEMUSIC_EXPORT void DuneMusic_SetKnownMusicIndex(unsigned index);
+DUNEMUSIC_EXPORT unsigned DMCALL DuneMusic_GetKnownMusicCount();
+DUNEMUSIC_EXPORT void DMCALL DuneMusic_SetKnownMusicIndex(unsigned index);
 
 #ifdef __cplusplus
 }
