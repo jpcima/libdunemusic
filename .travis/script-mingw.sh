@@ -53,5 +53,8 @@ pacman -Sq --noconfirm base-devel git mercurial mingw-w64-cmake mingw-w64-gcc mi
 # ---------------------------------------------------------------------------------------------------------------------
 # build the library
 
-"$CMAKE" -B build -DCMAKE_BUILD_TYPE=Release -DUSE_STDCALL=ON -DDUNEMUSIC_BUILD_SDL2=ON .
-"$CMAKE" --build build
+mkdir build
+pushd build
+"$CMAKE" -DCMAKE_BUILD_TYPE=Release -DUSE_STDCALL=ON -DDUNEMUSIC_BUILD_SDL2=ON ..
+make
+popd
