@@ -48,7 +48,7 @@ Server = https://github.com/jpcima/arch-mingw-w64/releases/download/repo.\$arch/
 EOF
 
 pacman -Sqy --noconfirm
-pacman -Sq --noconfirm base-devel cmake mingw-w64-gcc mingw-w64-pkg-config mingw-w64-sdl2
+pacman -Sq --noconfirm base-devel mingw-w64-cmake mingw-w64-gcc mingw-w64-pkg-config mingw-w64-sdl2
 
 # ---------------------------------------------------------------------------------------------------------------------
 # build the library
