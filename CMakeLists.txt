@@ -6,6 +6,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
 set(DUNEMUSIC_SDL2_PATH "" CACHE STRING "Use SDL2 libraries from this directory")
 option(DUNEMUSIC_BUILD_SDL2 "Build SDL2 libraries ourselves" OFF)
+option(DUNEMUSIC_BUILD_FORCE_STATIC "Pass flag -static to linker" OFF)
 
 option(BUILD_PLAYER "Build the player" OFF)
 option(USE_STDCALL "Build the Windows library using STDCALL convention" OFF)
@@ -119,11 +120,14 @@ if(BUILD_PLAYER)
     PRIVATE dunemusic_SDL2)
 endif()
 
-
 if(USE_STDCALL)
   target_compile_definitions(dunemusic PUBLIC "DUNEMUSIC_STDCALL=1")
 else()
   target_compile_definitions(dunemusic PUBLIC "DUNEMUSIC_CDECL=1")
+endif()
+
+if(DUNEMUSIC_BUILD_FORCE_STATIC)
+  target_link_options(dunemusic PRIVATE "-static")
 endif()
 
 message(STATUS "Build the player: ${BUILD_PLAYER}")
