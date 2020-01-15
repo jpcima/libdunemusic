@@ -52,6 +52,48 @@ matrix:
         - cp -f build/libdunemusic.dll libdunemusic-"$_DM_BUILD"/
         - install -d release
         - zip -9 -r release/libdunemusic-"$_DM_BUILD".zip libdunemusic-"$_DM_BUILD"
+    - os: linux
+      dist: bionic
+      env:
+        - _DM_BUILD=win32-cdecl
+        - _DM_MINGW=mingw32
+        - _DM_HOST=i686-w64-mingw32
+        - _DM_USE_STDCALL=FALSE
+      before_install:
+        - docker pull archlinux
+      install:
+        - container=$(docker run -d -i -t -v /home:/home archlinux /bin/bash)
+        - |
+          cross() {
+            docker exec -w "$(pwd)" -e "_DM_BUILD=$_DM_BUILD" -e "_DM_MINGW=$_DM_MINGW" -e "_DM_HOST=$_DM_HOST" -i -t "$container" "$@"
+          }
+      script:
+        - cross bash .travis/script-mingw.sh
+        - install -d libdunemusic-"$_DM_BUILD"
+        - cp -f build/libdunemusic.dll libdunemusic-"$_DM_BUILD"/
+        - install -d release
+        - zip -9 -r release/libdunemusic-"$_DM_BUILD".zip libdunemusic-"$_DM_BUILD"
+    - os: linux
+      dist: bionic
+      env:
+        - _DM_BUILD=win64-cdecl
+        - _DM_MINGW=mingw64
+        - _DM_HOST=x86_64-w64-mingw32
+        - _DM_USE_STDCALL=FALSE
+      before_install:
+        - docker pull archlinux
+      install:
+        - container=$(docker run -d -i -t -v /home:/home archlinux /bin/bash)
+        - |
+          cross() {
+            docker exec -w "$(pwd)" -e "_DM_BUILD=$_DM_BUILD" -e "_DM_MINGW=$_DM_MINGW" -e "_DM_HOST=$_DM_HOST" -i -t "$container" "$@"
+          }
+      script:
+        - cross bash .travis/script-mingw.sh
+        - install -d libdunemusic-"$_DM_BUILD"
+        - cp -f build/libdunemusic.dll libdunemusic-"$_DM_BUILD"/
+        - install -d release
+        - zip -9 -r release/libdunemusic-"$_DM_BUILD".zip libdunemusic-"$_DM_BUILD"
 
 before_deploy:
   - |
