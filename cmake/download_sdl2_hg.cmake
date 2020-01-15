@@ -14,7 +14,7 @@ find_package(Git REQUIRED)
 
 option(WITH_SDL2_WASAPI "Enable WASAPI audio output support for Windows build of SDL2" ON)
 if(WIN32)
-    message("== AudioCodecs: WITH_SDL2_WASAPI = ${WITH_SDL2_WASAPI}")
+    message(STATUS "AudioCodecs: WITH_SDL2_WASAPI = ${WITH_SDL2_WASAPI}")
     set(SDL2_WASAPI_FLAG "-DWASAPI=${WITH_SDL2_WASAPI}")
 endif()
 
@@ -36,11 +36,11 @@ set(SDL2_GIT_BRANCH "origin/master" CACHE STRING "GIT branch for SDL2 (unofficia
 set(SDL2_PROJECT_BRANCH)
 if(WIN32 AND MINGW)
     set(SDL_SOURCE_PATH_GIT "https://github.com/spurious/SDL-mirror.git")
-    message("== SDL2 will be downloaded as unofficial GIT repository from '${SDL2_GIT_BRANCH}' revision")
+    message(STATUS "SDL2 will be downloaded as unofficial GIT repository from '${SDL2_GIT_BRANCH}' revision")
     set(SDL2_PROJECT_BRANCH GIT_TAG "${SDL2_GIT_BRANCH}")
 else()
     set(SDL_SOURCE_PATH_URL "https://hg.libsdl.org/SDL/archive/${SDL2_HG_BRANCH}.tar.bz2")
-    message("== SDL2 will be downloaded from official Mercurial as TAR-BZ2 archive from '${SDL2_HG_BRANCH}' revision")
+    message(STATUS "SDL2 will be downloaded from official Mercurial as TAR-BZ2 archive from '${SDL2_HG_BRANCH}' revision")
 endif()
 
 ExternalProject_Add(
