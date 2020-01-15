@@ -2,7 +2,10 @@ cmake_minimum_required(VERSION 3.3)
 
 project(libdunemusic)
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
+
 set(DUNEMUSIC_SDL2_PATH "" CACHE STRING "Use SDL2 libraries from this directory")
+option(DUNEMUSIC_BUILD_SDL2 "Build SDL2 libraries ourselves" OFF)
 
 option(BUILD_PLAYER "Build the player" OFF)
 option(USE_STDCALL "Build the Windows library using STDCALL convention" OFF)
@@ -23,7 +26,18 @@ add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 
 ###
 add_library(dunemusic_SDL2 INTERFACE)
-if(DUNEMUSIC_SDL2_PATH)
+if(DUNEMUSIC_BUILD_SDL2)
+  set(BUILD_SDL2_SHARED OFF)
+  set(BUILD_SDL2_STATIC ON)
+  include(download_sdl2_hg)
+  message(STATUS "Built SDL2 will be in ${SDL2_INSTALL_DIR}")
+  target_include_directories(dunemusic_SDL2 INTERFACE "${SDL2_INSTALL_DIR}/include/SDL2")
+  target_link_libraries(dunemusic_SDL2 INTERFACE "${SDL2_INSTALL_DIR}/lib/libSDL2.a")
+  if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    target_link_libraries(dunemusic_SDL2 INTERFACE
+      "version" "opengl32" "dbghelp" "advapi32" "kernel32" "winmm" "imm32" "setupapi")
+  endif()
+elseif(DUNEMUSIC_SDL2_PATH)
   find_library(SDL2_LIBRARY "SDL2"
     PATHS "${DUNEMUSIC_SDL2_PATH}/lib")
   find_path(SDL2_INCLUDE_DIR "SDL.h"

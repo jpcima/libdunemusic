@@ -45,7 +45,7 @@ build_script:
   - ps: mkdir -p build
   - ps: mkdir -p release
   - ps: cd build
-  - ps: cmake -G "${env:CMAKE_GENERATOR}" -DUSE_STDCALL="${env:USE_STDCALL}" -DDUNEMUSIC_SDL2_PATH="$(pwd)/../SDL2-2.0.10" ..
+  - ps: cmake -G "${env:CMAKE_GENERATOR}" -DUSE_STDCALL="${env:USE_STDCALL}" -DDUNEMUSIC_BUILD_SDL2=ON ..
   - ps: cmake --build . --config "${env:CONFIGURATION}"
   - ps: cd "${env:CONFIGURATION}"
   - ps: 7z a "../../release/dunemusic-${env:BUILD_TYPE}-${env:CONFIGURATION}.7z" dunemusic.dll
