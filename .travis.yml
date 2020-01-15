@@ -24,7 +24,7 @@ matrix:
         - container=$(docker run -d -i -t -v /home:/home archlinux /bin/bash)
         - |
           cross() {
-            docker exec -w "$(pwd)" -e "_DM_BUILD=$_DM_BUILD" -e "_DM_MINGW=$_DM_MINGW" -e "_DM_HOST=$_DM_HOST" -i -t "$container" "$@"
+            docker exec -w "$(pwd)" -e "_DM_BUILD=$_DM_BUILD" -e "_DM_MINGW=$_DM_MINGW" -e "_DM_HOST=$_DM_HOST" -e "_DM_USE_STDCALL=$_DM_USE_STDCALL" -i -t "$container" "$@"
           }
       script:
         - cross bash .travis/script-mingw.sh
@@ -45,7 +45,7 @@ matrix:
         - container=$(docker run -d -i -t -v /home:/home archlinux /bin/bash)
         - |
           cross() {
-            docker exec -w "$(pwd)" -e "_DM_BUILD=$_DM_BUILD" -e "_DM_MINGW=$_DM_MINGW" -e "_DM_HOST=$_DM_HOST" -i -t "$container" "$@"
+            docker exec -w "$(pwd)" -e "_DM_BUILD=$_DM_BUILD" -e "_DM_MINGW=$_DM_MINGW" -e "_DM_HOST=$_DM_HOST" -e "_DM_USE_STDCALL=$_DM_USE_STDCALL" -i -t "$container" "$@"
           }
       script:
         - cross bash .travis/script-mingw.sh
@@ -66,7 +66,7 @@ matrix:
         - container=$(docker run -d -i -t -v /home:/home archlinux /bin/bash)
         - |
           cross() {
-            docker exec -w "$(pwd)" -e "_DM_BUILD=$_DM_BUILD" -e "_DM_MINGW=$_DM_MINGW" -e "_DM_HOST=$_DM_HOST" -i -t "$container" "$@"
+            docker exec -w "$(pwd)" -e "_DM_BUILD=$_DM_BUILD" -e "_DM_MINGW=$_DM_MINGW" -e "_DM_HOST=$_DM_HOST" -e "_DM_USE_STDCALL=$_DM_USE_STDCALL" -i -t "$container" "$@"
           }
       script:
         - cross bash .travis/script-mingw.sh
@@ -87,7 +87,7 @@ matrix:
         - container=$(docker run -d -i -t -v /home:/home archlinux /bin/bash)
         - |
           cross() {
-            docker exec -w "$(pwd)" -e "_DM_BUILD=$_DM_BUILD" -e "_DM_MINGW=$_DM_MINGW" -e "_DM_HOST=$_DM_HOST" -i -t "$container" "$@"
+            docker exec -w "$(pwd)" -e "_DM_BUILD=$_DM_BUILD" -e "_DM_MINGW=$_DM_MINGW" -e "_DM_HOST=$_DM_HOST" -e "_DM_USE_STDCALL=$_DM_USE_STDCALL" -i -t "$container" "$@"
           }
       script:
         - cross bash .travis/script-mingw.sh
