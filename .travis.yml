@@ -13,45 +13,45 @@ matrix:
     - os: linux
       dist: bionic
       env:
-        - _BUILD=win32-stdcall
-        - _MINGW=mingw32
-        - _HOST=i686-w64-mingw32
-        - _USE_STDCALL=TRUE
+        - _DM_BUILD=win32-stdcall
+        - _DM_MINGW=mingw32
+        - _DM_HOST=i686-w64-mingw32
+        - _DM_USE_STDCALL=TRUE
       before_install:
         - docker pull archlinux
       install:
         - container=$(docker run -d -i -t -v /home:/home archlinux /bin/bash)
         - |
           cross() {
-            docker exec -w "$(pwd)" -e "_BUILD=$_BUILD" -e "_MINGW=$_MINGW" -e "_HOST=$_HOST" -i -t "$container" "$@"
+            docker exec -w "$(pwd)" -e "_DM_BUILD=$_DM_BUILD" -e "_DM_MINGW=$_DM_MINGW" -e "_DM_HOST=$_DM_HOST" -i -t "$container" "$@"
           }
       script:
         - cross bash .travis/script-mingw.sh
-        - install -d libdunemusic-"$_BUILD"
-        - cp -f build/libdunemusic.dll libdunemusic-"$_BUILD"/
+        - install -d libdunemusic-"$_DM_BUILD"
+        - cp -f build/libdunemusic.dll libdunemusic-"$_DM_BUILD"/
         - install -d release
-        - zip -9 -r release/libdunemusic-"$_BUILD".zip libdunemusic-"$_BUILD"
+        - zip -9 -r release/libdunemusic-"$_DM_BUILD".zip libdunemusic-"$_DM_BUILD"
     - os: linux
       dist: bionic
       env:
-        - _BUILD=win64-stdcall
-        - _MINGW=mingw64
-        - _HOST=x86_64-w64-mingw32
-        - _USE_STDCALL=TRUE
+        - _DM_BUILD=win64-stdcall
+        - _DM_MINGW=mingw64
+        - _DM_HOST=x86_64-w64-mingw32
+        - _DM_USE_STDCALL=TRUE
       before_install:
         - docker pull archlinux
       install:
         - container=$(docker run -d -i -t -v /home:/home archlinux /bin/bash)
         - |
           cross() {
-            docker exec -w "$(pwd)" -e "_BUILD=$_BUILD" -e "_MINGW=$_MINGW" -e "_HOST=$_HOST" -i -t "$container" "$@"
+            docker exec -w "$(pwd)" -e "_DM_BUILD=$_DM_BUILD" -e "_DM_MINGW=$_DM_MINGW" -e "_DM_HOST=$_DM_HOST" -i -t "$container" "$@"
           }
       script:
         - cross bash .travis/script-mingw.sh
-        - install -d libdunemusic-"$_BUILD"
-        - cp -f build/libdunemusic.dll libdunemusic-"$_BUILD"/
+        - install -d libdunemusic-"$_DM_BUILD"
+        - cp -f build/libdunemusic.dll libdunemusic-"$_DM_BUILD"/
         - install -d release
-        - zip -9 -r release/libdunemusic-"$_BUILD".zip libdunemusic-"$_BUILD"
+        - zip -9 -r release/libdunemusic-"$_DM_BUILD".zip libdunemusic-"$_DM_BUILD"
 
 before_deploy:
   - |

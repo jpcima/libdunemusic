@@ -13,20 +13,8 @@ set -x
 # ---------------------------------------------------------------------------------------------------------------------
 # set variables
 
-test ! -z "$_MINGW"
-test ! -z "$_HOST"
-
-# ---------------------------------------------------------------------------------------------------------------------
-# setup
-
-export AR="$_HOST"-ar
-export RANLIB="$_HOST"-ranlib
-export CC="$_HOST"-gcc
-export CXX="$_HOST"-g++
-export STRIP="$_HOST"-strip
-export WINDRES="$_HOST"-windres
-export PKG_CONFIG="$_HOST"-pkg-config
-export CMAKE="$_HOST"-cmake
+test ! -z "$_DM_MINGW"
+test ! -z "$_DM_HOST"
 
 # ---------------------------------------------------------------------------------------------------------------------
 
@@ -47,6 +35,6 @@ pacman -Sq --noconfirm base-devel git mercurial mingw-w64-cmake mingw-w64-gcc mi
 
 mkdir build
 pushd build
-"$CMAKE" -DCMAKE_BUILD_TYPE=Release -DUSE_STDCALL="$_USE_STDCALL" -DDUNEMUSIC_BUILD_SDL2=ON ..
+"$_DM_HOST"-cmake -DCMAKE_BUILD_TYPE=Release -DUSE_STDCALL="$_DM_USE_STDCALL" -DDUNEMUSIC_BUILD_SDL2=ON ..
 make
 popd
