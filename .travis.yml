@@ -1,0 +1,74 @@
+language: c++
+
+branches:
+  except:
+    - automatic
+
+cache:
+  directories:
+    - download
+
+matrix:
+  include:
+    - os: linux
+      dist: bionic
+      env:
+        - _BUILD=win32
+        - _MINGW=mingw32
+        - _HOST=i686-w64-mingw32
+      before_install:
+        - docker pull archlinux
+      install:
+        - container=$(docker run -d -i -t -v /home:/home archlinux /bin/bash)
+        - |
+          cross() {
+            docker exec -w "$(pwd)" -e "_BUILD=$_BUILD" -e "_MINGW=$_MINGW" -e "_HOST=$_HOST" -i -t "$container" "$@"
+          }
+      script:
+        - cross bash .travis/script-mingw.sh
+        - install -d libdunemusic-"$_BUILD"
+        - cp -f build/libdunemusic.dll libdunemusic-"$_BUILD"/
+        - install -d release
+        - zip -9 -r release/libdunemusic-"$_BUILD".zip libdunemusic-"$_BUILD"
+    - os: linux
+      dist: bionic
+      env:
+        - _BUILD=win64
+        - _MINGW=mingw64
+        - _HOST=x86_64-w64-mingw32
+      before_install:
+        - docker pull archlinux
+      install:
+        - container=$(docker run -d -i -t -v /home:/home archlinux /bin/bash)
+        - |
+          cross() {
+            docker exec -w "$(pwd)" -e "_BUILD=$_BUILD" -e "_MINGW=$_MINGW" -e "_HOST=$_HOST" -i -t "$container" "$@"
+          }
+      script:
+        - cross bash .travis/script-mingw.sh
+        - install -d libdunemusic-"$_BUILD"
+        - cp -f build/libdunemusic.dll libdunemusic-"$_BUILD"/
+        - install -d release
+        - zip -9 -r release/libdunemusic-"$_BUILD".zip libdunemusic-"$_BUILD"
+
+before_deploy:
+  - |
+    if test "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false"; then
+      export TRAVIS_TAG=travis-continuous-release
+      git tag -f "$TRAVIS_TAG"
+    fi
+
+deploy:
+  provider: releases
+  api_key: "$GITHUB_TOKEN"
+  file: release/*
+  file_glob: true
+  prerelease: true
+  overwrite: true
+  edge: true
+  on:
+    branch: master
+
+env:
+  global:
+    secure: "kbRLVcRmOcHROyiM9C5lcHvGAsrmoos8Gd+H0iaiIFa92ydZ/36HJ+gT61pGosjNv3T39QoxDj+4B+/7DILifys78P65apiXJ4XeIhLLzL7uWXVNO7BqjR8B6nTSoPiCHkwREUo/OrOWOID1a6UkxezYTNdyZDFn6UxsSMQNN+e0uvDJlDzb5bLU9V2+T52w4+fL0zxyyUMm+r+C74ttwQ1nPYxB0dUMTJvQmu0aK9fmvo6I6WUU1RDxrVBMcHaSuSoQNWCzrUqMz8u7dr824LP2NQsNR83KsSlhMpu4vRbguUN0Oxcl/89BgOLpbRWstgyijOH5xVuK+HuFUC89wVH05njiL8c34B/b1ctAeTdd3ZRrTMbnE/lkIVFojC4KGsqurq2dM1+nJBFRPFlLourtl154EanIj3CDRq62h9vrD210ysbGCQvxn4h5a9p/xk6uH2SwbZvB68WiBVGGgc5oGT4z4SBtXDWbrhJZd4E8bBfw0ptNbplhWG0LPxd4SiuV9UIxsTvlQA9VlmTHuP7XMrnIsHGsKW2gWeFYqjbbXf7SnSgY6NbxOgJHIa+swUYUa4BLGPYvR/PkdROEfw3ZCwNdHOJmp+B7PpLvnf2EZZL2jXULS/TWelcpVHdoSgPv5yPai0rbcW+JlshgAejmsjfbJrKY/5GBL6pMNuk="
