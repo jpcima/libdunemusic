@@ -52,11 +52,6 @@ ExternalProject_Add(
     CMAKE_ARGS
         "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}"
         "-DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}"
-
-        # hack for these functions misdetected on MSVC...
-        -DHAVE_WCSLCPY=0
-        -DHAVE_WCSLCAT=0
-
         -DSNDIO=OFF
         -DLIBC=ON
         -DSDL_SHARED=${BUILD_SDL2_SHARED}
