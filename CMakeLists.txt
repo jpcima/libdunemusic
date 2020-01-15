@@ -39,16 +39,6 @@ if(DUNEMUSIC_BUILD_SDL2)
   else()
     target_link_libraries(dunemusic_SDL2 INTERFACE "${SDL2_INSTALL_DIR}/lib/libSDL2.a")
   endif()
-  if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-    target_link_libraries(dunemusic_SDL2 INTERFACE
-      version opengl32 dbghelp advapi32 kernel32 winmm imm32 setupapi)
-    if(MSVC)
-      target_link_libraries(dunemusic_SDL2 INTERFACE msvcrt vcruntime)
-    endif()
-    if(MINGW)
-      target_link_libraries(dunemusic_SDL2 INTERFACE iconv)
-    endif()
-  endif()
   add_dependencies(dunemusic_SDL2 SDL2HG)
 elseif(DUNEMUSIC_SDL2_PATH)
   find_library(SDL2_LIBRARY "${DUNEMUSIC_SDL2_LIBNAME}"
@@ -65,16 +55,6 @@ elseif(DUNEMUSIC_SDL2_PATH)
   message(STATUS "SDL headers: ${SDL2_INCLUDE_DIR}")
   target_include_directories(dunemusic_SDL2 INTERFACE "${SDL2_INCLUDE_DIR}")
   target_link_libraries(dunemusic_SDL2 INTERFACE "${SDL2_LIBRARY}")
-  if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-    target_link_libraries(dunemusic_SDL2 INTERFACE
-      version opengl32 dbghelp advapi32 kernel32 winmm imm32 setupapi)
-    if(MSVC)
-      target_link_libraries(dunemusic_SDL2 INTERFACE msvcrt vcruntime)
-    endif()
-    if(MINGW)
-      target_link_libraries(dunemusic_SDL2 INTERFACE iconv)
-    endif()
-  endif()
 else()
   find_package(SDL2 REQUIRED)
   if(TARGET SDL2::SDL2)
@@ -87,6 +67,20 @@ endif()
 
 # find_library(SDL2_MIXER_LIBRARY "SDL2_mixer")
 # target_link_libraries(dunemusic_SDL2 INTERFACE "${SDL2_MIXER_LIBRARY}")
+
+###
+if(DUNEMUSIC_BUILD_FORCE_STATIC)
+  if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    target_link_libraries(dunemusic_SDL2 INTERFACE
+      version opengl32 dbghelp advapi32 kernel32 winmm imm32 setupapi)
+    if(MSVC)
+      target_link_libraries(dunemusic_SDL2 INTERFACE msvcrt vcruntime)
+    endif()
+    if(MINGW)
+      target_link_libraries(dunemusic_SDL2 INTERFACE iconv)
+    endif()
+  endif()
+endif()
 
 ###
 add_library(fakeSDLmixer STATIC
@@ -144,5 +138,6 @@ if(DUNEMUSIC_BUILD_FORCE_STATIC)
   target_link_options(dunemusic PRIVATE "-static")
 endif()
 
+###
 message(STATUS "Build the player: ${BUILD_PLAYER}")
 message(STATUS "Use stdcall: ${USE_STDCALL}")
