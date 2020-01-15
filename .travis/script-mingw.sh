@@ -26,6 +26,7 @@ export CXX="$_HOST"-g++
 export STRIP="$_HOST"-strip
 export WINDRES="$_HOST"-windres
 export PKG_CONFIG="$_HOST"-pkg-config
+export CMAKE="$_HOST"-cmake
 
 export PKG_CONFIG="$PKG_CONFIG --static"
 
@@ -52,5 +53,5 @@ pacman -Sq --noconfirm base-devel cmake mingw-w64-gcc mingw-w64-pkg-config mingw
 # ---------------------------------------------------------------------------------------------------------------------
 # build the library
 
-cmake -B build -DCMAKE_BUILD_TYPE=Release -DUSE_STDCALL=ON -DDUNEMUSIC_BUILD_SDL2=ON .
-cmake --build build
+"$CMAKE" -B build -DCMAKE_BUILD_TYPE=Release -DUSE_STDCALL=ON -DDUNEMUSIC_BUILD_SDL2=ON .
+"$CMAKE" --build build
