@@ -13,9 +13,10 @@ matrix:
     - os: linux
       dist: bionic
       env:
-        - _BUILD=win32
+        - _BUILD=win32-stdcall
         - _MINGW=mingw32
         - _HOST=i686-w64-mingw32
+        - _USE_STDCALL=TRUE
       before_install:
         - docker pull archlinux
       install:
@@ -33,9 +34,10 @@ matrix:
     - os: linux
       dist: bionic
       env:
-        - _BUILD=win64
+        - _BUILD=win64-stdcall
         - _MINGW=mingw64
         - _HOST=x86_64-w64-mingw32
+        - _USE_STDCALL=TRUE
       before_install:
         - docker pull archlinux
       install:

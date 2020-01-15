@@ -55,6 +55,6 @@ pacman -Sq --noconfirm base-devel git mercurial mingw-w64-cmake mingw-w64-gcc mi
 
 mkdir build
 pushd build
-"$CMAKE" -DCMAKE_BUILD_TYPE=Release -DUSE_STDCALL=ON -DDUNEMUSIC_BUILD_SDL2=ON ..
+"$CMAKE" -DCMAKE_BUILD_TYPE=Release -DUSE_STDCALL="$_USE_STDCALL" -DDUNEMUSIC_BUILD_SDL2=ON ..
 make
 popd
