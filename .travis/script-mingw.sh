@@ -28,7 +28,7 @@ Server = https://github.com/jpcima/arch-mingw-w64/releases/download/repo.\$arch/
 EOF
 
 pacman -Sqy --noconfirm
-pacman -Sq --noconfirm base-devel git mercurial mingw-w64-cmake mingw-w64-gcc mingw-w64-pkg-config mingw-w64-sdl2
+pacman -Sq --noconfirm base-devel git mercurial mingw-w64-cmake mingw-w64-gcc mingw-w64-pkg-config mingw-w64-sdl2 mingw-w64-win-iconv
 
 # ---------------------------------------------------------------------------------------------------------------------
 # build the library
