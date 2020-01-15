@@ -38,7 +38,7 @@ pushd build
 "$_DM_HOST"-cmake \
            -DCMAKE_BUILD_TYPE=Release \
            -DUSE_STDCALL="$_DM_USE_STDCALL" \
-           -DDUNEMUSIC_BUILD_SDL2=ON \
+           -DDUNEMUSIC_SDL2_LIBNAME="SDL2-static" \
            -DDUNEMUSIC_BUILD_FORCE_STATIC=ON \
            ..
 make

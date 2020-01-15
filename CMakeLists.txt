@@ -5,6 +5,7 @@ project(libdunemusic C CXX)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
 set(DUNEMUSIC_SDL2_PATH "" CACHE STRING "Use SDL2 libraries from this directory")
+set(DUNEMUSIC_SDL2_LIBNAME "SDL2" CACHE STRING "Name of the SDL2 library")
 option(DUNEMUSIC_BUILD_SDL2 "Build SDL2 libraries ourselves" OFF)
 option(DUNEMUSIC_BUILD_FORCE_STATIC "Pass flag -static to linker" OFF)
 
@@ -47,7 +48,7 @@ if(DUNEMUSIC_BUILD_SDL2)
   endif()
   add_dependencies(dunemusic_SDL2 SDL2HG)
 elseif(DUNEMUSIC_SDL2_PATH)
-  find_library(SDL2_LIBRARY "SDL2"
+  find_library(SDL2_LIBRARY "${DUNEMUSIC_SDL2_LIBNAME}"
     PATHS "${DUNEMUSIC_SDL2_PATH}/lib")
   find_path(SDL2_INCLUDE_DIR "SDL.h"
     PATHS "${DUNEMUSIC_SDL2_PATH}/include"
