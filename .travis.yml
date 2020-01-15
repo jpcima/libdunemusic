@@ -3,6 +3,7 @@ language: c++
 branches:
   except:
     - automatic
+    - travis-continuous-release
 
 cache:
   directories:
