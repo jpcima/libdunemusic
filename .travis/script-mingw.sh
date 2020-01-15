@@ -28,14 +28,6 @@ export WINDRES="$_HOST"-windres
 export PKG_CONFIG="$_HOST"-pkg-config
 export CMAKE="$_HOST"-cmake
 
-export PKG_CONFIG="$PKG_CONFIG --static"
-
-export PATH=/opt/"$_MINGW"/"$_HOST"/bin:/opt/"$_MINGW"/bin:"$PATH"
-
-export CFLAGS="-I/opt/$_MINGW/include"
-export CXXFLAGS="-I/opt/$_MINGW/include"
-export LDFLAGS="-L/opt/$_MINGW/lib"
-
 # ---------------------------------------------------------------------------------------------------------------------
 
 cat >>/etc/pacman.conf <<EOF
