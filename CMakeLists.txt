@@ -39,7 +39,7 @@ if(DUNEMUSIC_BUILD_SDL2)
   endif()
   if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     target_link_libraries(dunemusic_SDL2 INTERFACE
-      version opengl32 dbghelp advapi32 kernel32 winmm imm32 setupapi)
+      version opengl32 dbghelp advapi32 kernel32 winmm imm32 setupapi libucrt vcruntime)
   endif()
   add_dependencies(dunemusic_SDL2 SDL2HG)
 elseif(DUNEMUSIC_SDL2_PATH)
