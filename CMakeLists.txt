@@ -37,6 +37,7 @@ if(DUNEMUSIC_BUILD_SDL2)
     target_link_libraries(dunemusic_SDL2 INTERFACE
       "version" "opengl32" "dbghelp" "advapi32" "kernel32" "winmm" "imm32" "setupapi")
   endif()
+  add_dependencies(dunemusic_SDL2 SDL2HG)
 elseif(DUNEMUSIC_SDL2_PATH)
   find_library(SDL2_LIBRARY "SDL2"
     PATHS "${DUNEMUSIC_SDL2_PATH}/lib")
