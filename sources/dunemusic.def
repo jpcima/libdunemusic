@@ -1,0 +1,16 @@
+LIBRARY dunemusic
+EXPORTS
+    DuneMusic_Init @1
+    DuneMusic_Quit @2
+    DuneMusic_GetSamples @3
+    DuneMusic_InsertMemoryFile @4
+    DuneMusic_ChangeMusic @5
+    DuneMusic_ChangeMusicEx @6
+    DuneMusic_SynthesizeAudio @7
+    DuneMusic_FreeAudio @8
+    DuneMusic_IsMusicEnabled @9
+    DuneMusic_SetMusicEnabled @10
+    DuneMusic_IsMusicPlaying @11
+    DuneMusic_SetMusicVolume @12
+    DuneMusic_GetKnownMusicCount @13
+    DuneMusic_SetKnownMusicIndex @14

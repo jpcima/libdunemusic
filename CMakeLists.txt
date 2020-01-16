@@ -10,6 +10,7 @@ option(DUNEMUSIC_BUILD_SDL2 "Build SDL2 libraries ourselves" OFF)
 option(DUNEMUSIC_BUILD_FORCE_STATIC "Pass flag -static to linker" OFF)
 
 option(BUILD_PLAYER "Build the player" OFF)
+option(BUILD_FILE_SYNTH "Build the sound file sythesizer (needs libsndfile)" OFF)
 option(USE_STDCALL "Build the Windows library using STDCALL convention" OFF)
 
 set(CMAKE_CXX_STANDARD "11")
@@ -126,6 +127,16 @@ if(BUILD_PLAYER)
   target_link_libraries(duneplay
     PRIVATE dunemusic
     PRIVATE dunemusic_SDL2)
+endif()
+
+if(BUILD_FILE_SYNTH)
+  add_executable(dunesynth
+    "sources/synth.cpp")
+  target_link_libraries(dunesynth
+    PRIVATE dunemusic
+    PRIVATE dunemusic_SDL2)
+  find_library(SNDFILE_LIBRARY "sndfile")
+  target_link_libraries(dunesynth PRIVATE "${SNDFILE_LIBRARY}")
 endif()
 
 if(USE_STDCALL)
