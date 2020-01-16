@@ -2561,3 +2561,43 @@ Mix_Chunk* SoundAdlibPC::getSubsong(int Num) {
     return myChunk;
 }
 
+int SoundAdlibPC::getSubsongWithMaxLength(int Num, Sint16* soundBuf, int maxFrames)
+{
+    int     totalFrames = 0;
+    int     currentFrames = 0;
+    bool    bSilent = true;
+    Sint16* start;
+    Sint16* end;
+
+    playTrack(Num);
+
+    do {
+        currentFrames = maxFrames - totalFrames;
+
+        if (currentFrames <= 0)
+            break;
+        if (currentFrames > 256)
+            currentFrames = 256;
+
+        start = soundBuf + 2 * totalFrames;
+        end = start + 2 * currentFrames;
+
+        memset(start, 0, (Uint8*)end - (Uint8*)start);
+
+        SoundAdlibPC::callback(this, (Uint8*)start, (Uint8*)end - (Uint8*)start);
+
+        bSilent = true;
+        for(Sint16* p = start; p < end; p++) {
+            /* prudence against OPL emulators which produce ±1 in silent state */
+            if(std::abs(*p) > 1) {
+                bSilent = false;
+                break;
+            }
+        }
+
+        if (!bSilent)
+            totalFrames += currentFrames;
+    } while(isPlaying() || !bSilent);
+
+    return totalFrames;
+}

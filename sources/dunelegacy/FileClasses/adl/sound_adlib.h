@@ -88,6 +88,7 @@ public:
     void beginFadeOut();
 
     Mix_Chunk* getSubsong(int Num);
+    int getSubsongWithMaxLength(int Num, Sint16* soundBuf, int maxFrames);
 
     void setVolume(int newVolume) {
         volume = newVolume;

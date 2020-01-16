@@ -74,7 +74,13 @@ typedef enum DuneMusicType {
 DUNEMUSIC_EXPORT void DMCALL DuneMusic_ChangeMusic(DuneMusicType musicType);
 DUNEMUSIC_EXPORT void DMCALL DuneMusic_ChangeMusicEx(DuneMusicType musicType, const char *filename, int musicNum);
 
-DUNEMUSIC_EXPORT int16_t *DMCALL DuneMusic_SynthesizeAudio(const char *filename, int musicNum, int volume, size_t *numFramesReturned);
+/**
+   @param volume use `-1` for default, which is identical to specifying `64`
+   @param soundBuf pointer to an output array of minimum capacity `2 * maxFrames`
+   @param maxFrames maximum number of frames which can be received in `soundBuf`
+   @return actual number N of frames synthesized, `soundBuf` contains `2 * N` elements.
+ */
+DUNEMUSIC_EXPORT size_t DMCALL DuneMusic_SynthesizeAudio(const char *filename, int musicNum, int volume, int16_t *soundBuf, size_t maxFrames);
 DUNEMUSIC_EXPORT void DMCALL DuneMusic_FreeAudio(int16_t *audioBuffer);
 
 DUNEMUSIC_EXPORT int DMCALL DuneMusic_IsMusicEnabled();

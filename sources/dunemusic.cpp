@@ -59,11 +59,11 @@ void DMCALLCC DuneMusic_ChangeMusicEx(DuneMusicType musicType, const char *filen
 }
 
 DUNEMUSIC_EXPORT
-int16_t *DMCALLCC DuneMusic_SynthesizeAudio(const char *filename, int musicNum, int volume, size_t *numFramesReturned)
+size_t DMCALL DuneMusic_SynthesizeAudio(const char *filename, int musicNum, int volume, int16_t *soundBuf, size_t maxFrames)
 {
     sdl2::RWops_ptr rwop = pFileManager->openFile(filename);
     if (!rwop)
-        return nullptr;
+        return 0;
 
     std::unique_ptr<SoundAdlibPC> adlib{new SoundAdlibPC(rwop.get())};
 
@@ -72,16 +72,7 @@ int16_t *DMCALLCC DuneMusic_SynthesizeAudio(const char *filename, int musicNum, 
 
     adlib->setVolume(volume);
 
-    sdl2::mix_chunk_ptr chunk{adlib->getSubsong(musicNum)};
-    if (!chunk)
-        return nullptr;
-
-    chunk->allocated = 0;
-
-    if (numFramesReturned)
-        *numFramesReturned = chunk->alen / (2 * sizeof(int16_t));
-
-    return (int16_t *)chunk->abuf;
+    return adlib->getSubsongWithMaxLength(musicNum, soundBuf, maxFrames);
 }
 
 DUNEMUSIC_EXPORT
