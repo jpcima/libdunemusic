@@ -29,11 +29,10 @@
 */
 
 #include <misc/md5.h>
+#include <misc/FileStream.h>
 
 #include <string.h>
 #include <stdio.h>
-
-#include <SDL_rwops.h>
 
 /*
  * 32-bit integer manipulation macros (little endian)
@@ -294,24 +293,24 @@ void md5( const unsigned char *input, int ilen, unsigned char output[16] )
  */
 int md5_file( const char *path, unsigned char output[16] )
 {
-    SDL_RWops *rwops;
+    AbstractStream *rwops;
     size_t n;
     md5_context ctx;
     unsigned char buf[4*1024];
 
-    if( ( rwops = SDL_RWFromFile(path, "rb") ) == NULL )
+    if( ( rwops = FileStream::Open(path, "rb") ) == NULL )
         return( 1 );
 
     md5_starts( &ctx );
 
-    while( ( n = SDL_RWread(rwops, buf, 1, sizeof( buf )) ) > 0 )
+    while( ( n = rwops->Read(buf, 1, sizeof( buf )) ) > 0 )
         md5_update( &ctx, buf, (int) n );
 
     md5_finish( &ctx, output );
 
     memset( &ctx, 0, sizeof( md5_context ) );
 
-    SDL_RWclose(rwops);
+    delete(rwops);
     return( 0 );
 }
 

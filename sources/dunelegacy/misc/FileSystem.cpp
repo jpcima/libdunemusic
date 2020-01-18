@@ -16,6 +16,7 @@
  */
 
 #include <misc/FileSystem.h>
+#include <misc/FileStream.h>
 #include <misc/string_util.h>
 #include <misc/exceptions.h>
 #include <misc/SDL2pp.h>
@@ -317,7 +318,7 @@ bool getCaseInsensitiveFilename(std::string& filepath) {
 
 bool existsFile(const std::string& path) {
     // try opening the file
-    auto RWopsFile = sdl2::RWops_ptr{ SDL_RWFromFile(path.c_str(),"r") };
+    std::unique_ptr<FileStream> RWopsFile{FileStream::Open(path.c_str(),"r")};
 
     if(!RWopsFile) {
         return false;
@@ -327,20 +328,20 @@ bool existsFile(const std::string& path) {
 }
 
 std::string readCompleteFile(const std::string& filename) {
-    auto RWopsFile = sdl2::RWops_ptr{ SDL_RWFromFile(filename.c_str(),"r") };
+    std::unique_ptr<FileStream> RWopsFile{FileStream::Open(filename.c_str(),"r")};
 
     if(!RWopsFile) {
         return "";
     }
 
-    const Sint64 filesize = SDL_RWsize(RWopsFile.get());
+    const Sint64 filesize = RWopsFile->Size();
     if(filesize < 0) {
         return "";
     }
 
     std::unique_ptr<char[]> filedata{new char[(size_t) filesize]};
 
-    if(SDL_RWread(RWopsFile.get(), filedata.get(), (size_t) filesize, 1) != 1) {
+    if(RWopsFile->Read(filedata.get(), (size_t) filesize, 1) != 1) {
         return "";
     }
 

@@ -42,6 +42,7 @@
 #ifndef SOUND_ADLIB_H
 #define SOUND_ADLIB_H
 
+#include <misc/FileStream.h>
 #include <misc/SDL2pp.h>
 
 #include <fakeSDLmixer.h>
@@ -63,8 +64,8 @@ class AdlibDriver;
  */
 class SoundAdlibPC {
 public:
-    explicit SoundAdlibPC(SDL_RWops* rwop);
-    SoundAdlibPC(SDL_RWops* rwop, int freq);
+    explicit SoundAdlibPC(AbstractStream* rwop);
+    SoundAdlibPC(AbstractStream* rwop, int freq);
     SoundAdlibPC(const SoundAdlibPC& soundAdlibPC) = delete;
     SoundAdlibPC& operator=(const SoundAdlibPC& soundAdlibPC) = delete;
     ~SoundAdlibPC();
@@ -99,7 +100,7 @@ public:
     }
 
 private:
-    void internalLoadFile(SDL_RWops* rwop);
+    void internalLoadFile(AbstractStream* rwop);
 
     void play(uint8_t track);
 

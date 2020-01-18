@@ -19,6 +19,7 @@
 #define FILEMANAGER_H
 
 #include "Pakfile.h"
+#include <misc/FileStream.h>
 #include <misc/SDL2pp.h>
 
 #include <string>
@@ -57,7 +58,7 @@ public:
         \return a rwop to read the content of the specified file. Use SDL_RWclose() to close the file after usage.
 
     */
-    sdl2::RWops_ptr openFile(const std::string& filename);
+    AbstractStream* openFile(const std::string& filename);
 
     bool exists(const std::string& filename) const;
 

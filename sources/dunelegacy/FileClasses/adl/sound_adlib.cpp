@@ -2290,7 +2290,7 @@ const uint8 AdlibDriver::_unkTables[][32] = {
 int SoundAdlibPC::s_oplEmu = -1;
 
 
-SoundAdlibPC::SoundAdlibPC(SDL_RWops* rwop) : _driver(0), _trackEntries(), _soundDataPtr(nullptr), volume(MIX_MAX_VOLUME/2) {
+SoundAdlibPC::SoundAdlibPC(AbstractStream* rwop) : _driver(0), _trackEntries(), _soundDataPtr(nullptr), volume(MIX_MAX_VOLUME/2) {
     memset(_trackEntries, 0, sizeof(_trackEntries));
 
     Mix_QuerySpec(&m_freq, &m_format, &m_channels);
@@ -2310,7 +2310,7 @@ SoundAdlibPC::SoundAdlibPC(SDL_RWops* rwop) : _driver(0), _trackEntries(), _soun
     internalLoadFile(rwop);
 }
 
-SoundAdlibPC::SoundAdlibPC(SDL_RWops* rwop, int freq) : _driver(nullptr), _trackEntries(), _soundDataPtr(nullptr), volume(MIX_MAX_VOLUME/2) {
+SoundAdlibPC::SoundAdlibPC(AbstractStream* rwop, int freq) : _driver(nullptr), _trackEntries(), _soundDataPtr(nullptr), volume(MIX_MAX_VOLUME/2) {
     memset(_trackEntries, 0, sizeof(_trackEntries));
 
     m_freq = freq;
@@ -2462,15 +2462,15 @@ void SoundAdlibPC::beginFadeOut() {
     playSoundEffect(1);
 }
 
-void SoundAdlibPC::internalLoadFile(SDL_RWops* rwop) {
+void SoundAdlibPC::internalLoadFile(AbstractStream* rwop) {
   if(rwop == nullptr) {
     return;
   }
 
   uint8 *file_data = 0;
-  const Sint64 endOffset = SDL_RWsize(rwop);
+  const Sint64 endOffset = rwop->Size();
   if(endOffset <= 0) {
-    SDL_Log("SoundAdlibPC::internalLoadFile(): Cannot determine size of SDL_RWop!");
+    SDL_Log("SoundAdlibPC::internalLoadFile(): Cannot determine size of stream!");
     return;
   }
   size_t file_size = static_cast<size_t>(endOffset);
@@ -2479,8 +2479,8 @@ void SoundAdlibPC::internalLoadFile(SDL_RWops* rwop) {
   unk1();
 
   file_data = new uint8[file_size];
-  if(SDL_RWread(rwop,file_data,1,file_size) != (unsigned int) file_size) {
-    SDL_Log("SoundAdlibPC::internalLoadFile(): Cannot read from SDL_RWop!");
+  if(rwop->Read(file_data,1,file_size) != (unsigned int) file_size) {
+    SDL_Log("SoundAdlibPC::internalLoadFile(): Cannot read from stream!");
     delete [] file_data;
     return;
   }

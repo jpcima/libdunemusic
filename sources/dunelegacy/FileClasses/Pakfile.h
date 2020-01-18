@@ -18,14 +18,13 @@
 #ifndef PAKFILE_H
 #define PAKFILE_H
 
+#include <misc/FileStream.h>
 #include <misc/SDL2pp.h>
 
 #include <stdio.h>
 #include <string>
 #include <vector>
 #include <inttypes.h>
-
-#define PAKFILE_RWOP_TYPE   0x9A5F17EC
 
 /// A class for reading PAK-Files.
 /**
@@ -63,23 +62,30 @@ public:
     */
     inline int getNumFiles() const { return fileEntries.size(); };
 
-    sdl2::RWops_ptr openFile(const std::string& filename);
+    AbstractStream* openFile(const std::string& filename);
 
     bool exists(const std::string& filename) const;
 
-    void addFile(SDL_RWops* rwop, const std::string& filename);
+    void addFile(AbstractStream* rwop, const std::string& filename);
 
 private:
-    static size_t ReadFile(SDL_RWops* pRWop, void *ptr, size_t size, size_t n);
-    static size_t WriteFile(SDL_RWops *pRWop, const void *ptr, size_t size, size_t n);
-    static Sint64 SizeFile(SDL_RWops *pRWop);
-    static Sint64 SeekFile(SDL_RWops *pRWop, Sint64 offset, int whence);
-    static int CloseFile(SDL_RWops *pRWop);
+    class Stream : public AbstractStream
+    {
+    public:
+        Stream(RWopData *pRWopData) : pRWopData(pRWopData) {}
+        size_t Read(void *ptr, size_t size, size_t n) override;
+        size_t Write(const void *ptr, size_t size, size_t n) override;
+        Sint64 Size() override;
+        Sint64 Seek(Sint64 offset, int whence) override;
+        int Close() override;
+    private:
+        RWopData *pRWopData;
+    };
 
     void readIndex();
 
     bool write;
-    SDL_RWops * fPakFile;
+    FileStream * fPakFile;
     std::string filename;
 
     char* writeOutData;

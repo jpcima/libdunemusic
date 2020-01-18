@@ -107,6 +107,7 @@ add_library(dunemusic SHARED
   "sources/dunelegacy/FileClasses/FileManager.cpp"
   "sources/dunelegacy/FileClasses/Pakfile.cpp"
   "sources/dunelegacy/misc/FileSystem.cpp"
+  "sources/dunelegacy/misc/FileStream.cpp"
   "sources/dunelegacy/misc/fnkdat.cpp"
   "sources/dunelegacy/misc/format.cpp"
   "sources/dunelegacy/misc/md5.cpp"

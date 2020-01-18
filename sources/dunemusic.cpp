@@ -3,6 +3,7 @@
 #include "FileClasses/FileManager.h"
 #include "FileClasses/music/ADLPlayer.h"
 #include "FileClasses/adl/sound_adlib.h"
+#include "misc/FileStream.h"
 #include <fakeSDLmixer.h>
 
 std::unique_ptr<FileManager> pFileManager;
@@ -61,7 +62,7 @@ void DMCALLCC DuneMusic_ChangeMusicEx(DuneMusicType musicType, const char *filen
 DUNEMUSIC_EXPORT
 size_t DMCALL DuneMusic_SynthesizeAudio(const char *filename, int musicNum, int volume, int16_t *soundBuf, size_t maxFrames)
 {
-    sdl2::RWops_ptr rwop = pFileManager->openFile(filename);
+    std::unique_ptr<AbstractStream> rwop{pFileManager->openFile(filename)};
     if (!rwop)
         return 0;
 

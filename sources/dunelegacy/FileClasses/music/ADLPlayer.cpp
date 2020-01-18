@@ -202,7 +202,7 @@ void ADLPlayer::changeMusicEx(MUSICTYPE musicType, const std::string &filename, 
         Mix_HookMusic(nullptr, nullptr);
         delete pSoundAdlibPC;
 
-        sdl2::RWops_ptr rwop = pFileManager->openFile(filename);
+        std::unique_ptr<AbstractStream> rwop{pFileManager->openFile(filename)};
 
         pSoundAdlibPC = new SoundAdlibPC(rwop.get());
         pSoundAdlibPC->setVolume(musicVolume);

@@ -126,14 +126,14 @@ std::vector<std::string> FileManager::getMissingFiles() {
     return MissingFiles;
 }
 
-sdl2::RWops_ptr FileManager::openFile(const std::string& filename) {
-    sdl2::RWops_ptr ret;
+AbstractStream* FileManager::openFile(const std::string& filename) {
+    AbstractStream*ret;
 
     // try loading memory file
     {
         auto it = memoryFiles.find(strToUpper(filename));
         if (it != memoryFiles.end()) {
-            ret = sdl2::RWops_ptr{SDL_RWFromConstMem(it->second.first, it->second.second)};
+            ret = new MemStream(it->second.first, it->second.second);
             if(ret) {
                 return ret;
             }
@@ -145,7 +145,7 @@ sdl2::RWops_ptr FileManager::openFile(const std::string& filename) {
         auto externalFilename = searchPath + "/";
         externalFilename += filename;
         if(getCaseInsensitiveFilename(externalFilename)) {
-            ret = sdl2::RWops_ptr{SDL_RWFromFile(externalFilename.c_str(), "rb")};
+            ret = FileStream::Open(externalFilename.c_str(), "rb");
             if(ret) {
                 return ret;
             }
