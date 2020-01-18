@@ -1,11 +1,21 @@
 #pragma once
-
-#include <SDL_stdinc.h>
-#include <SDL_audio.h>
+#include "fakeSDL.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#define AUDIO_U8        0x0008
+#define AUDIO_S8        0x8008
+#define AUDIO_S16LSB    0x8010
+#define AUDIO_S16MSB    0x9010
+#if SDL_BYTEORDER == SDL_LIL_ENDIAN
+#   define AUDIO_S16SYS AUDIO_S16LSB
+#elif SDL_BYTEORDER == SDL_BIG_ENDIAN
+#   define AUDIO_S16SYS AUDIO_S16MSB
+#endif
+
+#define SDL_MIX_MAXVOLUME 128
 
 #define MIX_DEFAULT_FREQUENCY 22050
 #if SDL_BYTEORDER == SDL_LIL_ENDIAN

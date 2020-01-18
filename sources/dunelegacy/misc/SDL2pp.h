@@ -22,9 +22,7 @@
 #include <assert.h>
 #include <misc/exceptions.h>
 #include <misc/unique_or_nonowning_ptr.h>
-#include <SDL.h>
-#include <SDL_endian.h>
-#include <SDL_rwops.h>
+#include <fakeSDL.h>
 #include <fakeSDLmixer.h>
 
 namespace sdl2
@@ -54,17 +52,10 @@ namespace sdl2
 
         template<typename T, typename TArg, void(*Delete)(TArg*)>
         using unique_or_nonowning_ptr_arg_deleter = unique_or_nonowning_ptr<T, arg_deleter<T, TArg, Delete>>;
-
-        struct RWops_deleter
-        {
-            void operator()(SDL_RWops *RWops) const { if (RWops) { SDL_RWclose(RWops); } }
-        };
     }
 
     template<typename T>
     using sdl_ptr = implementation::unique_ptr_arg_deleter<T, void, SDL_free>;
-
-    typedef std::unique_ptr<SDL_RWops, implementation::RWops_deleter> RWops_ptr;
 
     typedef implementation::unique_ptr_deleter<Mix_Chunk, Mix_FreeChunk> mix_chunk_ptr;
 }

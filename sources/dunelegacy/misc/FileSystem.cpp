@@ -25,7 +25,9 @@
 #include <algorithm>
 #include <ctype.h>
 
+#if 0 // used for SDL GetBasePath
 #include <SDL_filesystem.h>
+#endif
 
 #ifdef _WIN32
 #include <io.h>
@@ -413,6 +415,7 @@ std::string getDuneLegacyDataDir() {
         dataDir = DUNELEGACY_DATADIR;
 #endif
 
+#if 0
         if((dataDir.empty()) || (dataDir == ".") || (dataDir == "./") || (dataDir == ".\\")) {
             char* basePath = SDL_GetBasePath();
             if(basePath == nullptr) {
@@ -421,6 +424,7 @@ std::string getDuneLegacyDataDir() {
             dataDir = std::string(basePath);
             SDL_free(basePath);
         }
+#endif
 
         duneLegacyDataDir = dataDir;
     }

@@ -4,9 +4,6 @@ project(libdunemusic C CXX)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
-set(DUNEMUSIC_SDL2_PATH "" CACHE STRING "Use SDL2 libraries from this directory")
-set(DUNEMUSIC_SDL2_LIBNAME "SDL2" CACHE STRING "Name of the SDL2 library")
-option(DUNEMUSIC_BUILD_SDL2 "Build SDL2 libraries ourselves" OFF)
 option(DUNEMUSIC_BUILD_FORCE_STATIC "Pass flag -static to linker" OFF)
 
 option(BUILD_PLAYER "Build the player" OFF)
@@ -28,68 +25,10 @@ endif()
 add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 
 ###
-add_library(dunemusic_SDL2 INTERFACE)
-if(DUNEMUSIC_BUILD_SDL2)
-  set(BUILD_SDL2_SHARED OFF)
-  set(BUILD_SDL2_STATIC ON)
-  include(download_sdl2_hg)
-  message(STATUS "Built SDL2 will be in ${SDL2_INSTALL_DIR}")
-  target_include_directories(dunemusic_SDL2 INTERFACE "${SDL2_INSTALL_DIR}/include/SDL2")
-  if(MSVC)
-    target_link_libraries(dunemusic_SDL2 INTERFACE "${SDL2_INSTALL_DIR}/lib/SDL2.lib")
-  else()
-    target_link_libraries(dunemusic_SDL2 INTERFACE "${SDL2_INSTALL_DIR}/lib/libSDL2.a")
-  endif()
-  add_dependencies(dunemusic_SDL2 SDL2HG)
-elseif(DUNEMUSIC_SDL2_PATH)
-  find_library(SDL2_LIBRARY "${DUNEMUSIC_SDL2_LIBNAME}"
-    PATHS "${DUNEMUSIC_SDL2_PATH}/lib")
-  find_path(SDL2_INCLUDE_DIR "SDL.h"
-    PATHS "${DUNEMUSIC_SDL2_PATH}/include"
-    PATH_SUFFIXES "SDL2")
-  if(NOT SDL2_LIBRARY)
-    message(FATAL_ERROR "Cannot find SDL2 libraries")
-  elseif(NOT SDL2_INCLUDE_DIR)
-    message(FATAL_ERROR "Cannot find SDL2 headers")
-  endif()
-  message(STATUS "SDL library: ${SDL2_LIBRARY}")
-  message(STATUS "SDL headers: ${SDL2_INCLUDE_DIR}")
-  target_include_directories(dunemusic_SDL2 INTERFACE "${SDL2_INCLUDE_DIR}")
-  target_link_libraries(dunemusic_SDL2 INTERFACE "${SDL2_LIBRARY}")
-else()
-  find_package(SDL2 REQUIRED)
-  if(TARGET SDL2::SDL2)
-    target_link_libraries(dunemusic_SDL2 INTERFACE SDL2::SDL2)
-  else()
-    target_include_directories(dunemusic_SDL2 INTERFACE ${SDL2_INCLUDE_DIRS})
-    target_link_libraries(dunemusic_SDL2 INTERFACE ${SDL2_LIBRARIES})
-  endif()
-endif()
-
-# find_library(SDL2_MIXER_LIBRARY "SDL2_mixer")
-# target_link_libraries(dunemusic_SDL2 INTERFACE "${SDL2_MIXER_LIBRARY}")
-
-###
-if(DUNEMUSIC_BUILD_FORCE_STATIC)
-  if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-    target_link_libraries(dunemusic_SDL2 INTERFACE
-      version opengl32 dbghelp advapi32 kernel32 winmm imm32 setupapi)
-    if(MSVC)
-      target_link_libraries(dunemusic_SDL2 INTERFACE msvcrt vcruntime)
-    endif()
-    if(MINGW)
-      target_link_libraries(dunemusic_SDL2 INTERFACE iconv)
-    endif()
-  endif()
-endif()
-
-###
 add_library(fakeSDLmixer STATIC
   "sources/fakeSDLmixer/fakeSDLmixer.cpp")
 target_include_directories(fakeSDLmixer
   PUBLIC "sources/fakeSDLmixer")
-target_link_libraries(fakeSDLmixer
-  PUBLIC dunemusic_SDL2)
 
 ###
 add_library(dunemusic SHARED
@@ -117,25 +56,29 @@ add_library(dunemusic SHARED
 target_include_directories(dunemusic
   PRIVATE "sources/dunelegacy")
 target_link_libraries(dunemusic
-  PRIVATE dunemusic_SDL2
   PRIVATE fakeSDLmixer)
 target_compile_definitions(dunemusic
   PRIVATE "DUNEMUSIC_BUILD=1")
 
 if(BUILD_PLAYER)
+  find_package(SDL2 REQUIRED)
   add_executable(duneplay
     "sources/play.cpp")
   target_link_libraries(duneplay
-    PRIVATE dunemusic
-    PRIVATE dunemusic_SDL2)
+    PRIVATE dunemusic)
+  if(TARGET SDL2::SDL2)
+    target_link_libraries(duneplay PRIVATE SDL2::SDL2)
+  else()
+    target_include_directories(duneplay PRIVATE ${SDL2_INCLUDE_DIRS})
+    target_link_libraries(duneplay PRIVATE ${SDL2_LIBRARIES})
+  endif()
 endif()
 
 if(BUILD_FILE_SYNTH)
   add_executable(dunesynth
     "sources/synth.cpp")
   target_link_libraries(dunesynth
-    PRIVATE dunemusic
-    PRIVATE dunemusic_SDL2)
+    PRIVATE dunemusic)
   find_library(SNDFILE_LIBRARY "sndfile")
   target_link_libraries(dunesynth PRIVATE "${SNDFILE_LIBRARY}")
 endif()
