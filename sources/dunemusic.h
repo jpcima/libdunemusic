@@ -41,7 +41,7 @@ typedef enum DuneMusicOplEmu {
 DUNEMUSIC_EXPORT void DMCALL DuneMusic_Init(int sampleRate, const char *dataDirectory, DuneMusicOplEmu oplEmu);
 DUNEMUSIC_EXPORT void DMCALL DuneMusic_Quit();
 
-DUNEMUSIC_EXPORT void DMCALL DuneMusic_GetSamples(int16_t *buf, unsigned count);
+DUNEMUSIC_EXPORT void DMCALL DuneMusic_GetSamples(uint8_t *buf, unsigned count);
 
 DUNEMUSIC_EXPORT void DMCALL DuneMusic_InsertMemoryFile(const char *filename, const void *data, size_t length);
 
@@ -76,12 +76,11 @@ DUNEMUSIC_EXPORT void DMCALL DuneMusic_ChangeMusicEx(DuneMusicType musicType, co
 
 /**
    @param volume use `-1` for default, which is identical to specifying `64`
-   @param soundBuf pointer to an output array of minimum capacity `2 * maxFrames`
-   @param maxFrames maximum number of frames which can be received in `soundBuf`
-   @return actual number N of frames synthesized, `soundBuf` contains `2 * N` elements.
+   @param soundBuf pointer to an output array of minimum capacity `maxBytes`
+   @param maxBytes maximum number of bytes which can be received in `soundBuf`
+   @return actual number N of bytes synthesized, `soundBuf` contains `N` elements.
  */
-DUNEMUSIC_EXPORT size_t DMCALL DuneMusic_SynthesizeAudio(const char *filename, int musicNum, int volume, int16_t *soundBuf, size_t maxFrames);
-DUNEMUSIC_EXPORT void DMCALL DuneMusic_FreeAudio(int16_t *audioBuffer);
+DUNEMUSIC_EXPORT size_t DMCALL DuneMusic_SynthesizeAudio(const char *filename, int musicNum, int volume, uint8_t *soundBuf, size_t maxBytes);
 
 DUNEMUSIC_EXPORT int DMCALL DuneMusic_IsMusicEnabled();
 DUNEMUSIC_EXPORT void DMCALL DuneMusic_SetMusicEnabled(int enabled);

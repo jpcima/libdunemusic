@@ -85,5 +85,5 @@ int main(int argc, char *argv[])
 
 static void SDLCALL ProcessAudio(void *userdata, Uint8 *stream, int len)
 {
-    DuneMusic_GetSamples((Sint16 *)stream, len / (2 * sizeof(Uint16)));
+    DuneMusic_GetSamples(stream, len);
 }

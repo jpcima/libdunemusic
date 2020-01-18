@@ -91,6 +91,17 @@ void SDLCALL Mix_FreeChunk(Mix_Chunk *chunk)
     }
 }
 
+void SDLCALL FakeMix_ProcessBytes(Uint8 *bytes, unsigned count)
+{
+    std::lock_guard<std::mutex> lock(sMutex);
+
+    MixerData *mixerData = sMixerData.get();
+
+    if (mixerData->hookFunc)
+        mixerData->hookFunc(mixerData->hookData, bytes, count);
+    /* TODO volume */
+}
+
 void SDLCALL FakeMix_ProcessFrames(Sint16 *frames, unsigned count)
 {
     std::lock_guard<std::mutex> lock(sMutex);

@@ -41,6 +41,7 @@ int SDLCALL Mix_VolumeMusic(int volume);
 void SDLCALL Mix_FreeChunk(Mix_Chunk *chunk);
 
 /**/
+void SDLCALL FakeMix_ProcessBytes(Uint8 *bytes, unsigned count);
 void SDLCALL FakeMix_ProcessFrames(Sint16 *frames, unsigned count);
 
 #ifdef __cplusplus

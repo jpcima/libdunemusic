@@ -42,9 +42,9 @@ void DMCALLCC DuneMusic_InsertMemoryFile(const char *filename, const void *data,
 }
 
 DUNEMUSIC_EXPORT
-void DMCALLCC DuneMusic_GetSamples(int16_t *buf, unsigned count)
+void DMCALLCC DuneMusic_GetSamples(uint8_t *buf, unsigned count)
 {
-    FakeMix_ProcessFrames(buf, count);
+    FakeMix_ProcessBytes(buf, count);
 }
 
 DUNEMUSIC_EXPORT
@@ -60,7 +60,7 @@ void DMCALLCC DuneMusic_ChangeMusicEx(DuneMusicType musicType, const char *filen
 }
 
 DUNEMUSIC_EXPORT
-size_t DMCALL DuneMusic_SynthesizeAudio(const char *filename, int musicNum, int volume, int16_t *soundBuf, size_t maxFrames)
+size_t DMCALL DuneMusic_SynthesizeAudio(const char *filename, int musicNum, int volume, uint8_t *soundBuf, size_t maxBytes)
 {
     std::unique_ptr<AbstractStream> rwop{pFileManager->openFile(filename)};
     if (!rwop)
@@ -73,13 +73,10 @@ size_t DMCALL DuneMusic_SynthesizeAudio(const char *filename, int musicNum, int 
 
     adlib->setVolume(volume);
 
-    return adlib->getSubsongWithMaxLength(musicNum, soundBuf, maxFrames);
-}
+    size_t maxFrames = maxBytes / (2 * sizeof(int16_t));
+    size_t frames = adlib->getSubsongWithMaxLength(musicNum, (Sint16*)soundBuf, maxFrames);
 
-DUNEMUSIC_EXPORT
-void DMCALLCC DuneMusic_FreeAudio(int16_t *audioBuffer)
-{
-    SDL_free(audioBuffer);
+    return frames * (2 * sizeof(int16_t));
 }
 
 DUNEMUSIC_EXPORT

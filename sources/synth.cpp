@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     std::vector<int16_t> soundBuf(2 * maxFrames);
 
     size_t numFrames = DuneMusic_SynthesizeAudio(
-        musicFilename, musicNum, -1, soundBuf.data(), maxFrames);
+        musicFilename, musicNum, -1, (uint8_t *)soundBuf.data(), maxFrames * (2 * sizeof(int16_t)));
 
     if (numFrames <= 0) {
         fprintf(stderr, "Failed to synthesize song.\n");
