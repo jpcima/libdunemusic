@@ -68,7 +68,7 @@ private:
 
     std::vector<std::unique_ptr<Pakfile>> pakFiles;
 
-    std::map<std::string, std::pair<const void *, size_t>> memoryFiles;
+    std::map<std::string, std::string> memoryFiles;
 };
 
 #endif // FILEMANAGER_H

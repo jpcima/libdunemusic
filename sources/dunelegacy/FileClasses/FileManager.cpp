@@ -133,7 +133,7 @@ AbstractStream* FileManager::openFile(const std::string& filename) {
     {
         auto it = memoryFiles.find(strToUpper(filename));
         if (it != memoryFiles.end()) {
-            ret = new MemStream(it->second.first, it->second.second);
+            ret = new MemStream(it->second.data(), it->second.size());
             if(ret) {
                 return ret;
             }
@@ -189,7 +189,7 @@ bool FileManager::exists(const std::string& filename) const {
 
 void FileManager::insertMemoryFile(const std::string &filename, const void *data, size_t length)
 {
-    memoryFiles[strToUpper(filename)] = {data, length};
+    memoryFiles[strToUpper(filename)].assign((const char *)data, length);
 }
 
 
