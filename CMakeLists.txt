@@ -8,6 +8,7 @@ option(DUNEMUSIC_BUILD_FORCE_STATIC "Pass flag -static to linker" OFF)
 
 option(BUILD_PLAYER "Build the player" OFF)
 option(BUILD_FILE_SYNTH "Build the sound file sythesizer (needs libsndfile)" OFF)
+option(BUILD_SONG_LENGTH "Build the song length analyzer" OFF)
 option(USE_STDCALL "Build the Windows library using STDCALL convention" OFF)
 
 set(CMAKE_CXX_STANDARD "11")
@@ -81,6 +82,17 @@ if(BUILD_FILE_SYNTH)
     PRIVATE dunemusic)
   find_library(SNDFILE_LIBRARY "sndfile")
   target_link_libraries(dunesynth PRIVATE "${SNDFILE_LIBRARY}")
+endif()
+
+if(BUILD_SONG_LENGTH)
+  add_executable(songlengths
+    "sources/songlengths.cpp")
+  target_link_libraries(songlengths
+    PRIVATE dunemusic)
+  target_include_directories(songlengths
+    PRIVATE "sources/dunelegacy")
+  target_link_libraries(songlengths
+    PRIVATE fakeSDLmixer)
 endif()
 
 if(USE_STDCALL)
