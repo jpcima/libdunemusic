@@ -11,7 +11,7 @@ option(BUILD_FILE_SYNTH "Build the sound file sythesizer (needs libsndfile)" OFF
 option(BUILD_SONG_LENGTH "Build the song length analyzer" OFF)
 option(USE_STDCALL "Build the Windows library using STDCALL convention" OFF)
 
-set(CMAKE_CXX_STANDARD "11")
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_C_VISIBILITY_PRESET "hidden")
 set(CMAKE_CXX_VISIBILITY_PRESET "hidden")
 set(CMAKE_VISIBILITY_INLINES_HIDDEN "hidden")
